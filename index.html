@@ -57,12 +57,7 @@
   <div class="row" id="querypanel" >
     <div class="col-md-12">
       <form>
-        <textarea class="form-control" id="query">
-select expand(unionAll($a, $b, $c) )
-let $a = (select * from animal),
-$b = (select from Character limit 10),
-$c = (select from Battle limit 10)
-limit 100
+        <textarea class="form-control" id="query" ng-model="query">
         </textarea>
       </form>
     </div>
@@ -91,6 +86,7 @@ limit 100
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="active"><a href="#wikitab" aria-controls="wikitab" role="tab" data-toggle="tab">Wiki</a></li>
           <li role="presentation"><a href="#infotab" aria-controls="infotab" role="tab" data-toggle="tab">Raw Info</a></li>
+          <li role="presentation"><a href="#samplequeries" aria-controls="samplequeries" role="tab" data-toggle="tab">Sample Queries</a></li>
         </ul>
 
         <!-- Tab panes -->
@@ -99,6 +95,13 @@ limit 100
             <iframe id="wiki" src="http://gameofthrones.wikia.com/wiki/Game_of_Thrones_Wiki"></iframe>
           </div>
           <div role="tabpanel" class="tab-pane" id="infotab"></div>
+          <div role="tabpanel" class="tab-pane" id="samplequeries">
+            <ul>
+              <li ng-repeat="sampleQuery in sampleQueries">
+                <a ng-click="bindQuery(sampleQuery.key)">{{sampleQuery.key}}</a>
+              </li>
+            </ul>
+          </div>
         </div>
 
       </div>
