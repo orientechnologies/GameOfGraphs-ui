@@ -62,6 +62,24 @@ function getGraphIcons() {
         size: 50,
         color: '#aa0000'
       }
+    },
+    Region: {
+      shape: 'icon',
+      icon: {
+        face: 'FontAwesome',
+        code: '\uf278',
+        size: 50,
+        color: '#aa0000'
+      }
+    },
+    Cast: {
+      shape: 'icon',
+      icon: {
+        face: 'FontAwesome',
+        code: '\uf183',
+        size: 50,
+        color: '#aa0000'
+      }
     }
   }
 

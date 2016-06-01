@@ -64,15 +64,19 @@
 
   </div>
   <div class="row" id="querypanel" >
-      <div class="col-md-1">
-        <button class="btn btn-sm btn-primary" ng-click="submitQuery()"><i class="fa fa-play"></i> Execute</button>
+      <div class="col-md-9">
+
+          <button class="btn btn-sm btn-primary" ng-click="submitQuery()"><i class="fa fa-play"></i> Execute</button>
+          <button class="btn btn-sm btn-primary" ng-click="more()"> ...More</button>
+          <button class="btn btn-sm btn-primary" ng-click="submitAppendQuery()"><i class="fa fa-plus"></i> Add Result</button>
+          <button class="btn btn-sm btn-primary" ng-click="submitRemoveQuery()"><i class="fa fa-minus"></i> Remove Result</button>
+          <button class="btn btn-sm btn-primary" ng-click="fitGraph()"><i class="fa fa-arrows-alt"></i> Zoom Out</button>
+          <button class="btn btn-sm btn-primary" ng-click="stabilizePhysics()"><i></i> Freeze Physics</button>
+          <button class="btn btn-sm btn-primary" ng-click="reactivatePhysics()"><i></i> Reactivate Physics</button>
+          <button class="btn btn-sm btn-primary" ng-click="expandCollapsePanels()"><i></i> Resize Panels</button>
+          <span id="contextInfo"></span>
       </div>
-      <div class="col-md-7">
-        <div id="contextInfo"></div>
-      </div>
-      <div class="col-md-1">
-        <button class="btn btn-sm btn-primary" ng-click="fitGraph()"><i class="fa fa-arrows-alt"></i> Fit Graph</button>
-      </div>
+
       <div class="col-md-3">
         <div class="pull-right">
           <form class="form-inline"><label >Limit </label> <input type="text" id="querylimit" class="form-control" value="50"></input></form>
@@ -80,14 +84,16 @@
       </div>
   </div>
   <div class="row" id="querypanel" >
-    <div class="col-md-5" id="mynetwork"></div>
-    <div class="col-md-7" id="wikipanel">
+    <!--div class="col-md-5" id="mynetwork"></div>
+    <div class="col-md-7" id="wikipanel"-->
+    <div ng-class="networkPanelClass()" id="mynetwork"></div>
+    <div ng-class="wikiPanelClass()" id="wikipanel">
       <div>
 
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="active"><a href="#infotab" aria-controls="infotab" role="tab" data-toggle="tab">Graph Info</a></li>
-          <li role="presentation"><a href="#wikitab" aria-controls="wikitab" role="tab" data-toggle="tab">Show Wiki</a></li>
+          <li role="presentation"><a href="#wikitab" aria-controls="wikitab" role="tab" data-toggle="tab">Wiki</a></li>
           <li role="presentation"><a href="#samplequeries" aria-controls="samplequeries" role="tab" data-toggle="tab">Sample Queries</a></li>
           <li role="presentation"><a href="#datasetinfo" aria-controls="datasetinfo" role="tab" data-toggle="tab">Dataset Info</a></li>
         </ul>
@@ -95,10 +101,11 @@
         <!-- Tab panes -->
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane active" id="infotab">
+            <h3 ng-show="infoPanelHint">{{infoPanelHint}}</h2>
             <div class="container-fluid">
               <div class="row">
                 <div class="col-md-6" id="infotab-attributes">
-                  <table class="table" >
+                  <table ng-show="currentElement['@rid']" class="table" >
                     <tr>
                       <th colspan="2">{{currentElement.name}}</td>
                     </tr>

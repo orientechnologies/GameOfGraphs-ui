@@ -54,7 +54,36 @@ gameofgraphs.controller('GraphPanelController', function GraphPanelController($s
       });
   }
 
+  $scope.graphWidth = 5;
+  $scope.expandCollapsePanels = function(){
+    if($scope.graphWidth == 5){
+      $scope.graphWidth = 8;
+    }else{
+      $scope.graphWidth = 5;
+    }
+  }
+
+  $scope.networkPanelClass = function(){
+      return "col-md-"+$scope.graphWidth;
+  }
+
+  $scope.wikiPanelClass = function(){
+      return "col-md-"+(12 - $scope.graphWidth);
+  }
+
+  $scope.stabilizePhysics = function(){
+    network.stopSimulation();
+    network.setOptions({physics:{enabled:false}});
+  }
+
+  $scope.reactivatePhysics = function(){
+    network.setOptions({physics:{enabled:true}});
+    network.startSimulation();
+  }
+
+
   $scope.expandEdge = function(direction, type){
+
     if(!$scope.currentElement){
       return;
     }
@@ -95,9 +124,62 @@ gameofgraphs.controller('GraphPanelController', function GraphPanelController($s
     var limit = $("#querylimit").val();
     var query = $("#query").val();
     executeQuery(query, limit);
+    $scope.lastPage = 0;
+  }
+
+  $scope.submitAppendQuery = function(){
+    $scope.lastPage = 0;
+    var limit = $("#querylimit").val();
+    var query = $("#query").val();
+
+    var allRids = Object.keys(lastResultSet);
+    var vertexRids = [];
+    for(var i in allRids){
+      var rid = allRids[i];
+      if(nodes.get(rid)){
+        vertexRids.push(rid);
+      }
+    }
+    var vertexRidsString = "[" + (vertexRids.join(", "))+"]";
+
+    var queryString = "select expand(unionAll($new, $old)) let "+
+    "$new = (select from ("+query+") limit "+limit+"), "+
+    "$old = (SELECT FROM "+vertexRidsString+")";
+
+    appendQuery(queryString, -1);
+  }
+
+  $scope.more = function(){
+    $scope.lastPage++;
+    var limit = $("#querylimit").val();
+    var query = $("#query").val();
+
+    var allRids = Object.keys(lastResultSet);
+    var vertexRids = [];
+    for(var i in allRids){
+      var rid = allRids[i];
+      if(nodes.get(rid)){
+        vertexRids.push(rid);
+      }
+    }
+    var vertexRidsString = "[" + (vertexRids.join(", "))+"]";
+
+    var queryString = "select expand(unionAll($new, $old)) let "+
+    "$new = (select from ("+query+") "+
+    ($scope.lastPage > 0 ? " skip " +$scope.lastPage * limit : "") +
+    " limit "+limit+"), "+
+    "$old = (SELECT FROM "+vertexRidsString+")";
+
+    appendQuery(queryString, -1);
+    $scope.lastPage++;
   }
 
 
+  $scope.submitRemoveQuery = function(){
+    var limit = $("#querylimit").val();
+    var query = $("#query").val();
+    removeQuery(query, limit);
+  }
 
 
 
@@ -144,6 +226,32 @@ gameofgraphs.controller('GraphPanelController', function GraphPanelController($s
         },
         success: function (data){
           appendGraph(data)
+        },
+        error: function (jqXHR, textStatus, errorThrown){
+          alert(jqXHR.responseJSON.errors[0].content);
+        }
+      });
+  }
+
+  var removeQuery = function(query, limit) {
+    if(!limit){
+      limit = 100;
+    }
+    $.ajax({
+        type: "POST",
+        url: orientDbUrl+"sql/-/"+limit,
+        dataType: 'json',
+        data: JSON.stringify({
+          "command": query,
+          "mode": "graph"
+        }),
+        async: true,
+        headers: {
+          "Authorization": "Basic " + btoa(orientDbUser+":"+orientDbPass)
+        },
+        success: function (data){
+          $scope.removeElements(data.graph.vertices);
+          $scope.removeElements(data.graph.edges);
         },
         error: function (jqXHR, textStatus, errorThrown){
           alert(jqXHR.responseJSON.errors[0].content);
@@ -265,6 +373,19 @@ gameofgraphs.controller('GraphPanelController', function GraphPanelController($s
         color: getColorFor(eData["@class"])
       });
     }
+
+    $scope.reactivatePhysics();
+  }
+
+  $scope.removeElements = function(data){
+    if(!data){
+      return;
+    }
+    for(var i in data){
+      lastResultSet[data[i]['@rid']] = null;
+      nodes.remove({id: data[i]['@rid']});
+      edges.remove({id: data[i]['@rid']});
+    }
   }
 
   $scope.removeElement = function(){
@@ -286,13 +407,26 @@ gameofgraphs.controller('GraphPanelController', function GraphPanelController($s
 
   $scope.sampleQueries = [
     {
+      key: "Some people",
+      value: "select from Character\n"+
+      "/* \n"+
+      "Click '...More' to load more characters \n"+
+      "Or change the query and click '+ Add Result' to add other information to the graph \n"+
+      "*/\n"
+    },
+    {
+      key: "Some Animals",
+      value: "select from Animal"
+    },
+    {
       key: "All the Lannisters",
       value: "select from Character where name like '%Lannister'"
     },
     {
-      key: "Random people, animals and battles",
+      key: "Random people, animals and battles together",
       value: "select expand(unionAll($a, $b, $c) )\n"+
-      "let $a = (select * from animal),\n"+
+      "let \n"+
+      "$a = (select * from animal),\n"+
       "$b = (select from Character limit 20),\n"+
       "$c = (select from Battle limit 20)\n"+
       "limit 100"
@@ -319,7 +453,7 @@ gameofgraphs.controller('GraphPanelController', function GraphPanelController($s
     }
   ]
 
-  $scope.query = $scope.sampleQueries[1].value;
+  $scope.query = $scope.sampleQueries[0].value;
 
 
   $scope.bindQuery = function(value){
