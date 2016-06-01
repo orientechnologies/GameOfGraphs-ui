@@ -28,3 +28,8 @@ iframe{
   height: 30px;
   overflow: hidden;
 }
+
+#datasetinfo{
+  height: 600px;
+  overflow: scroll;
+}

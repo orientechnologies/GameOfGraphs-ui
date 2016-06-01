@@ -1,3 +1,7 @@
+var orientDbUrl ="http://localhost:2480/command/GameOfThrones/"
+var orientDbUser = "admin"
+var orientDbPass = "admin"
+
 String.prototype.hashCode = function() {
   var hash = 0, i, chr, len;
   if (this.length === 0) return hash;
@@ -68,7 +72,7 @@ var executeQuery = function(query, limit) {
   }
   $.ajax({
       type: "POST",
-      url: "http://localhost:2480/command/GameOfThrones/sql/-/"+limit,
+      url: orientDbUrl+"sql/-/"+limit,
       dataType: 'json',
       data: JSON.stringify({
         "command": query,
@@ -76,7 +80,7 @@ var executeQuery = function(query, limit) {
       }),
       async: true,
       headers: {
-        "Authorization": "Basic " + btoa("admin:admin")
+        "Authorization": "Basic " + btoa(orientDbUser+":"+orientDbPass)
       },
       success: function (data){
         buildGraph(data)

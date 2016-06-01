@@ -35,6 +35,33 @@ function getGraphIcons() {
         size: 80,
         color: '#aa0000'
       }
+    },
+    Noble_house: {
+      shape: 'icon',
+      icon: {
+        face: 'FontAwesome',
+        code: '\uf19c',
+        size: 80,
+        color: '#aa0000'
+      }
+    },
+    Noblehouse: {
+      shape: 'icon',
+      icon: {
+        face: 'FontAwesome',
+        code: '\uf19c',
+        size: 50,
+        color: '#aa0000'
+      }
+    },
+    Sword: {
+      shape: 'icon',
+      icon: {
+        face: 'FontAwesome',
+        code: '\uf0e7',
+        size: 50,
+        color: '#aa0000'
+      }
     }
   }
 
