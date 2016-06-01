@@ -315,6 +315,12 @@ gameofgraphs.controller('GraphPanelController', function GraphPanelController($s
         shape: 'dot'
       },
       groups: getGraphIcons()
+      // ,
+      // edges: {
+      //   smooth: {
+      //     type:'continuous'
+      //   }
+      // }
     };
 
     network = new vis.Network(container, data, options);

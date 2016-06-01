@@ -1,5 +1,14 @@
+@font-face {
+  font-family: "GotFont";
+  src: url(../font/got-font.ttf) format("truetype");
+}
+
 body{
   background-color: rgb(215, 203, 171);
+}
+
+.navbar-brand{
+  font-family: "GotFont", sans-serif;
 }
 
 canvas{
