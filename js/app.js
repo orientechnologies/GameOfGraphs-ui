@@ -13,7 +13,7 @@ gameofgraphs.controller('GraphPanelController', function GraphPanelController($s
     for (i = 0, len = this.length; i < len; i++) {
       chr   = this.charCodeAt(i);
       hash  = ((hash << 5) - hash) + chr;
-      hash |= 0; 
+      hash |= 0;
     }
     return hash;
   };
@@ -418,6 +418,10 @@ gameofgraphs.controller('GraphPanelController', function GraphPanelController($s
       "/* \n"+
       "Click '...More' to load more characters \n"+
       "Or change the query and click '+ Add Result' to add other information to the graph \n"+
+      "This is OrientDB SQL, it's very similar to standard SQL \n"+
+      "As an example you can try the following: \n"+
+      "SELECT * FROM Character WHERE name = 'Eddard Stark' or name = 'Daenerys Targaryen'\n"+
+      "See also the 'Sample Queries' section below \n"+
       "*/\n"
     },
     {
