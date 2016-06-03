@@ -11,6 +11,11 @@ body{
   font-family: "GotFont", sans-serif;
 }
 
+.poweredby{
+  font-family: "GotFont", sans-serif;
+  font-size: 50%;
+}
+
 canvas{
   background-color: rgb(240,240,240);
 }
