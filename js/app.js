@@ -3,9 +3,9 @@ var gameofgraphs = angular.module('gameofgraphs', []);
 gameofgraphs.controller('GraphPanelController', function GraphPanelController($scope) {
 
 
-  var orientDbUrl = "http://localhost:2480/command/GameOfThrones/";
-  var orientDbUser = "admin";
-  var orientDbPass = "admin";
+  var orientDbUrl = "/command/GameOfThrones/";
+  var orientDbUser = "reader";
+  var orientDbPass = "reader";
 
   String.prototype.hashCode = function () {
     var hash = 0, i, chr, len;
@@ -13,7 +13,7 @@ gameofgraphs.controller('GraphPanelController', function GraphPanelController($s
     for (i = 0, len = this.length; i < len; i++) {
       chr   = this.charCodeAt(i);
       hash  = ((hash << 5) - hash) + chr;
-      hash |= 0; // Convert to 32bit integer
+      hash |= 0; 
     }
     return hash;
   };
