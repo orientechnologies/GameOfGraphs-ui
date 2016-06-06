@@ -19,7 +19,8 @@ RUN mkdir /orientdb \
   && wget  $ORIENTDB_DOWNLOAD_URL -O orientdb-community-$ORIENTDB_VERSION.tar.gz \
   && tar -xvzf orientdb-community-$ORIENTDB_VERSION.tar.gz -C /orientdb --strip-components=1 \
   && rm orientdb-community-$ORIENTDB_VERSION.tar.gz \
-  && rm -rf /orientdb/databases/*
+  && rm -rf /orientdb/databases/* \
+  && rm /orientdb/plugins/studio*
 
 
 ENV PATH /orientdb/bin:$PATH
